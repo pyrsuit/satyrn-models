@@ -5,11 +5,16 @@ Use the `satyrn-benchmark` package to benchmark a model with
 
 Given a Hugging Face repo of raw safetensors weights, the pipeline:
 
-1. installs and starts an [Ollama](https://ollama.com) server,
+1. starts the [Ollama](https://ollama.com) server if it isn't running,
 2. downloads the checkpoint and converts it to GGUF with llama.cpp,
 3. registers the GGUF file as an Ollama model,
 4. runs each configured evalplus dataset against it,
 5. writes logs, samples, scores and a summary under `results/evalplus/`.
+
+## Prerequisites
+
+[Ollama](https://ollama.com/download) has to be installed on the machine before running the benchmark;
+the tool starts the server but never installs it.
 
 ## Run it
 
@@ -20,7 +25,7 @@ pip install -e ./benchmark
 satyrn-benchmark --model mellum2-12b-a2.5
 ```
 
-Ollama and the llama.cpp toolchain are installed on the first run. For back-to-back runs on
+The llama.cpp toolchain is installed on the first run. For back-to-back runs on
 the same machine, pass `--no-install-deps` to skip that step:
 
 ```sh

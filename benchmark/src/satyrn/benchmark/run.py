@@ -29,7 +29,7 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
     # Ollama ignores the key, but evalplus's OpenAI client demands a non-empty one.
     os.environ.setdefault("OPENAI_API_KEY", "ollama")
 
-    ollama.ensure_server(cfg.install_deps)
+    ollama.ensure_server()
 
     repo = model.format_repo_id(cfg.model.hf_ref)
     outtype = cfg.model.gguf_outtype or model.detect_outtype(repo)
@@ -98,7 +98,7 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
     "--install-deps/--no-install-deps",
     default=BenchmarkConfig.install_deps,
     show_default=True,
-    help="Install Ollama and the llama.cpp toolchain if missing. Turn off for back-to-back runs.",
+    help="Install the llama.cpp toolchain if missing. Turn off for back-to-back runs.",
 )
 def main(
     model_name: str,
