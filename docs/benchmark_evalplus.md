@@ -22,25 +22,15 @@ Install the package on the GPU machine and call the CLI:
 
 ```sh
 pip install -e ./benchmark
-satyrn-benchmark --model mellum2-12b-a2.5
+satyrn-benchmark --hf-ref hf.co/JetBrains/Mellum2-12B-A2.5B-Instruct
 ```
 
 The llama.cpp toolchain is installed on the first run. For back-to-back runs on
 the same machine, pass `--no-install-deps` to skip that step:
 
 ```sh
-satyrn-benchmark --model gemma-4-26b-a4b-it --no-install-deps
+satyrn-benchmark --hf-ref hf.co/google/gemma-4-26B-A4B-it --no-install-deps
 ```
-
-## Change what gets benchmarked
-
-The configuration lives in `benchmark/src/satyrn/benchmark/config.py`. `MODELS` holds the models you can pick:
-
-| `--model` | Hugging Face ref |
-| --- | --- |
-| `mellum2-12b-a2.5` | `hf.co/JetBrains/Mellum2-12B-A2.5B-Instruct` |
-| `qwen3.6-27b` | `hf.co/Qwen/Qwen3.6-27B` |
-| `gemma-4-26b-a4b-it` | `hf.co/google/gemma-4-26B-A4B-it` |
 
 ## Output
 

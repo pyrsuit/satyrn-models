@@ -1,4 +1,3 @@
-import dataclasses
 import logging
 import os
 import sys
@@ -7,7 +6,7 @@ from pathlib import Path
 import click
 
 from satyrn.benchmark import evaluate, model, ollama
-from satyrn.benchmark.config import DATASETS, MODELS, BenchmarkConfig, EvalplusConfig
+from satyrn.benchmark.config import DATASETS, BenchmarkConfig, EvalplusConfig, ModelConfig
 
 logging.basicConfig(
     level=logging.INFO,
@@ -50,11 +49,9 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
 
 @click.command("satyrn-benchmark")
 @click.option(
-    "--model",
-    "model_name",
-    type=click.Choice(sorted(MODELS)),
+    "--hf-ref",
     required=True,
-    help="Which of the packaged models to benchmark.",
+    help="The Hugging Face repo to benchmark, e.g. `hf.co/Qwen/Qwen3.6-27B`.",
 )
 @click.option(
     "--gguf-outtype",
@@ -101,7 +98,7 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
     help="Install the llama.cpp toolchain if missing. Turn off for back-to-back runs.",
 )
 def main(
-    model_name: str,
+    hf_ref: str,
     gguf_outtype: str | None,
     datasets: tuple[str, ...],
     results_dir: str,
@@ -111,11 +108,8 @@ def main(
     install_deps: bool,
 ) -> None:
     """Benchmark a Hugging Face model with evalplus, served by Ollama on the same machine."""
-    model_config = MODELS[model_name]
-    if gguf_outtype:
-        model_config = dataclasses.replace(model_config, gguf_outtype=gguf_outtype)
     cfg = BenchmarkConfig(
-        model=model_config,
+        model=ModelConfig(hf_ref=hf_ref, gguf_outtype=gguf_outtype),
         results_dir=results_dir,
         work_dir=work_dir,
         install_deps=install_deps,
