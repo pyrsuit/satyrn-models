@@ -23,6 +23,8 @@ def build_command(model_name: str, dataset: str, cfg: BenchmarkConfig) -> list[s
         cfg.evalplus.base_url,
         "--root",
         cfg.results_dir,
+        "--n_samples",
+        str(cfg.evalplus.nsamples),
     ]
     if cfg.evalplus.greedy:
         command.append("--greedy")

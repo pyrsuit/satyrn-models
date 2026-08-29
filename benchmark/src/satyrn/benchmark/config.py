@@ -22,6 +22,8 @@ DATASETS = ("humaneval", "mbpp")
 class EvalplusConfig:
     datasets: tuple[str, ...] = DATASETS
     greedy: bool = True
+    # evalplus resets it to 1 for greedy decoding
+    nsamples: int = 1
     backend: str = "openai"
     base_url: str = "http://localhost:11434/v1"
 

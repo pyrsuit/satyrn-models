@@ -89,6 +89,13 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
     help="Sample greedily, which is what pass@1 expects.",
 )
 @click.option(
+    "--nsamples",
+    type=int,
+    default=EvalplusConfig.nsamples,
+    show_default=True,
+    help="Completions sampled per problem. Needs --no-greedy; greedy decoding forces 1.",
+)
+@click.option(
     "--install-deps/--no-install-deps",
     default=BenchmarkConfig.install_deps,
     show_default=True,
@@ -101,6 +108,7 @@ def main(
     results_dir: str,
     work_dir: str,
     greedy: bool,
+    nsamples: int,
     install_deps: bool,
 ) -> None:
     """Benchmark a Hugging Face model with evalplus, served by Ollama on the same machine."""
@@ -112,6 +120,6 @@ def main(
         results_dir=results_dir,
         work_dir=work_dir,
         install_deps=install_deps,
-        evalplus=EvalplusConfig(datasets=datasets, greedy=greedy),
+        evalplus=EvalplusConfig(datasets=datasets, greedy=greedy, nsamples=nsamples),
     )
     run_benchmark(cfg)
