@@ -9,6 +9,11 @@ import click
 from satyrn.benchmark import evaluate, model, ollama
 from satyrn.benchmark.config import DATASETS, MODELS, BenchmarkConfig, EvalplusConfig
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    stream=sys.stdout,
+)
 logger = logging.getLogger(__name__)
 
 
@@ -19,12 +24,6 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
     Ollama server, runs each configured evalplus dataset against it, and writes
     logs, samples, scores and a summary under the configured results directory.
     """
-    # Configured here, not at import time, so the notebook cell captures the log.
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
-        stream=sys.stdout,
-    )
     logger.info("Config: %s", cfg)
 
     # Ollama ignores the key, but evalplus's OpenAI client demands a non-empty one.

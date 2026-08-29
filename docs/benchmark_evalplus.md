@@ -11,21 +11,25 @@ Given a Hugging Face repo of raw safetensors weights, the pipeline:
 4. runs each configured evalplus dataset against it,
 5. writes logs, samples, scores and a summary under `results/evalplus/`.
 
-## Run it on molab
+## Run it
 
-1. **Create the notebook.** On [molab](https://molab.marimo.io/notebooks), use the **new notebook**
-   dropdown and paste the notebook's GitHub URL:
-   `https://github.com/pyrsuit/satyrn-models/blob/$SATYRN_REF/benchmark/notebooks/evalplus.py`
-2. **Attach a GPU**. The default is 4 CPUs and
-   32 GB RAM with no GPU; pick the GPU is an NVIDIA RTX Pro 6000 Blackwell (96 GB VRAM).
-3. **Set `SATYRN_REF` in the notebook.**
-4. **Run both cells.**
-5. **Collect the results** from the **file sidebar** under `results/evalplus/`.
+Install the package on the GPU machine and call the CLI:
+
+```sh
+pip install -e ./benchmark
+satyrn-benchmark --model mellum2-12b-a2.5
+```
+
+Ollama and the llama.cpp toolchain are installed on the first run. For back-to-back runs on
+the same machine, pass `--no-install-deps` to skip that step:
+
+```sh
+satyrn-benchmark --model gemma-4-26b-a4b-it --no-install-deps
+```
 
 ## Change what gets benchmarked
 
-The configuration lives in `benchmark/src/satyrn/benchmark/config.py`, inside the package
-because molab installs it straight from git. `MODELS` holds the models you can pick:
+The configuration lives in `benchmark/src/satyrn/benchmark/config.py`. `MODELS` holds the models you can pick:
 
 | `--model` | Hugging Face ref |
 | --- | --- |
