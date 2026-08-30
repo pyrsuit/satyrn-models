@@ -1,3 +1,4 @@
+import json
 import logging
 import shutil
 import subprocess
@@ -41,6 +42,13 @@ def ensure_server() -> None:
             return
         time.sleep(1)
     raise RuntimeError(f"Ollama server did not respond on {TAGS_URL} within {STARTUP_TIMEOUT_SECONDS}s.")
+
+
+def is_model_registered(name: str) -> bool:
+    """Whether Ollama already has a model registered under `name`."""
+    with urllib.request.urlopen(TAGS_URL, timeout=5) as response:
+        tags = json.load(response)
+    return any(entry.get("name") == name for entry in tags.get("models", []))
 
 
 def create_model(name: str, gguf_path: Path) -> None:

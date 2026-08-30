@@ -33,8 +33,11 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
     repo = model.format_repo_id(cfg.model.hf_ref)
     outtype = cfg.model.gguf_outtype or model.detect_outtype(repo)
     model_name = f"local/{model.extract_model_name(repo)}:{outtype}"
-    gguf_path = model.build_gguf(repo, outtype, Path(cfg.work_dir), cfg.install_deps)
-    ollama.create_model(model_name, gguf_path)
+    if ollama.is_model_registered(model_name):
+        logger.info("Ollama already has %s; skipping the GGUF conversion and `ollama create`", model_name)
+    else:
+        gguf_path = model.build_gguf(repo, outtype, Path(cfg.work_dir), cfg.install_deps)
+        ollama.create_model(model_name, gguf_path)
 
     results = {dataset: evaluate.run_dataset(model_name, dataset, cfg) for dataset in cfg.evalplus.datasets}
     failed = [dataset for dataset, (returncode, _) in results.items() if returncode != 0]
