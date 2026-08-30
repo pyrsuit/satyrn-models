@@ -6,9 +6,6 @@ from satyrn.benchmark.config import BenchmarkConfig
 
 logger = logging.getLogger(__name__)
 
-# evalplus's own default, mirrored here because it names the result files.
-TEMPERATURE = 0.0
-
 
 def build_command(model_name: str, dataset: str, cfg: BenchmarkConfig) -> list[str]:
     command = [
@@ -25,6 +22,8 @@ def build_command(model_name: str, dataset: str, cfg: BenchmarkConfig) -> list[s
         cfg.results_dir,
         "--n_samples",
         str(cfg.evalplus.nsamples),
+        "--temperature",
+        str(cfg.evalplus.temperature),
     ]
     if cfg.evalplus.greedy:
         command.append("--greedy")
@@ -52,7 +51,7 @@ def result_paths(model_name: str, dataset: str, cfg: BenchmarkConfig) -> list[Pa
 
     Named after the model, backend and temperature, with "/" replaced by "--".
     """
-    identifier = f"{model_name.strip('./').replace('/', '--')}_{cfg.evalplus.backend}_temp_{TEMPERATURE}"
+    identifier = f"{model_name.strip('./').replace('/', '--')}_{cfg.evalplus.backend}_temp_{cfg.evalplus.temperature}"
     dataset_dir = Path(cfg.results_dir) / dataset
     return [dataset_dir / f"{identifier}.jsonl", dataset_dir / f"{identifier}_eval_results.json"]
 

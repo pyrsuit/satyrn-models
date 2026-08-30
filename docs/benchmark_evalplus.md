@@ -32,6 +32,16 @@ the same machine, pass `--no-install-deps` to skip that step:
 satyrn-benchmark --hf-ref hf.co/google/gemma-4-26B-A4B-it --no-install-deps
 ```
 
+## pass@k
+
+The default run is greedy, which evalplus scores as pass@1. To sample instead, pass a
+positive `--temperature` together with `--no-greedy` and `--nsamples`.
+
+```sh
+pip install -e ./benchmark
+satyrn-benchmark --hf-ref hf.co/Qwen/Qwen3.6-27B --temperature=0.8 --no-greedy --nsamples=10
+```
+
 ## Output
 
 Under `results_dir` (default `results/evalplus/`):

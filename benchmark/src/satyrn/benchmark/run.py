@@ -92,6 +92,13 @@ def run_benchmark(cfg: BenchmarkConfig) -> Path:
     help="Completions sampled per problem. Needs --no-greedy; greedy decoding forces 1.",
 )
 @click.option(
+    "--temperature",
+    type=float,
+    default=EvalplusConfig.temperature,
+    show_default=True,
+    help="Sampling temperature. Needs --no-greedy; greedy decoding forces 0.0.",
+)
+@click.option(
     "--install-deps/--no-install-deps",
     default=BenchmarkConfig.install_deps,
     show_default=True,
@@ -105,6 +112,7 @@ def main(
     work_dir: str,
     greedy: bool,
     nsamples: int,
+    temperature: float,
     install_deps: bool,
 ) -> None:
     """Benchmark a Hugging Face model with evalplus, served by Ollama on the same machine."""
@@ -113,6 +121,6 @@ def main(
         results_dir=results_dir,
         work_dir=work_dir,
         install_deps=install_deps,
-        evalplus=EvalplusConfig(datasets=datasets, greedy=greedy, nsamples=nsamples),
+        evalplus=EvalplusConfig(datasets=datasets, greedy=greedy, nsamples=nsamples, temperature=temperature),
     )
     run_benchmark(cfg)

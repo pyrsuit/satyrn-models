@@ -18,8 +18,13 @@ class EvalplusConfig:
     greedy: bool = True
     # evalplus resets it to 1 for greedy decoding
     nsamples: int = 1
+    temperature: float = 0.0
     backend: str = "openai"
     base_url: str = "http://localhost:11434/v1"
+
+    def __post_init__(self) -> None:
+        if not self.greedy and self.temperature <= 0:
+            raise ValueError("Sampling needs a positive temperature; pass --temperature or keep --greedy.")
 
 
 @dataclass(frozen=True)
