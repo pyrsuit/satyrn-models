@@ -9,6 +9,8 @@ from huggingface_hub import get_safetensors_metadata, snapshot_download
 logger = logging.getLogger(__name__)
 
 LLAMA_CPP_URL = "https://github.com/ggml-org/llama.cpp.git"
+# llama.cpp pins transformers==4.57.6, too old to read the newest architectures'
+CONVERSION_TRANSFORMERS = "transformers>=5.0.0"
 SAFETENSORS_DTYPE_TO_OUTTYPE = {"F64": "f32", "F32": "f32", "F16": "f16", "BF16": "bf16"}
 FALLBACK_OUTTYPE = "f16"
 
@@ -93,6 +95,7 @@ def get_isolated_conversion_python(work_dir: Path, llama_cpp_dir: Path, install_
     else:
         install = [str(python), "-m", "pip", "install", "--quiet"]
     subprocess.run([*install, "-e", str(llama_cpp_dir)], check=True)
+    subprocess.run([*install, "--upgrade", CONVERSION_TRANSFORMERS], check=True)
     return python
 
 
